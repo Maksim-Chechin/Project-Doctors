@@ -77,6 +77,7 @@ import ModalForm from "@/components/UI/modalForm.vue";
 import axios from "axios";
 import Specialists from "@/components/specialists.vue";
 import ModalDoc from "@/components/UI/modalDoc.vue";
+import {mapState, mapGetters, mapMutations, mapActions} from "vuex";
 
 export default {
   data() {
@@ -84,52 +85,34 @@ export default {
       isOpen: false,
       isOpenInfo: false,
       isOpenDoc: false,
-      information: [],
       informationDoctors: '',
     };
   },
   components: {ModalDoc, Specialists, InfoList, AddInfo, ModalList, ModalForm,},
+  computed: {
+    ...mapState(["information"]),
+    ...mapGetters(["getInformation"]),
+  },
   methods: {
-    async loadFromJSON() {
-      try {
-        const response = await axios.get("http://localhost:3000/data.json");
-        this.information = response.data;
-        console.log("Данные загружены!");
-      } catch (error) {
-        console.error("Ошибка загрузки:", error);
-      }
-    },
-    async saveToJSON() {
-      try {
-        await axios.post("http://localhost:3000/save", this.information);
-
-        console.log("Данные сохранены!");
-      } catch (error) {
-        console.error("Ошибка сохранения:", error);
-      }
-    },
-
-
+    ...mapActions(["addDoctor", "removeDoctor", "updateDoctor" ]),
+    ...mapActions(["loadFromJSON", "saveToJSON"]),
     createInfo(info) {
-      this.information.push({...info, id: Date.now()});
+      this.addDoctor(info);
     },
     removeItemInfo(info) {
-      this.information = this.information.filter(i => i.id !== info.id);
+      this.removeDoctor(info.id);
     },
-    updateInfo(updatedInfo) {
-      const index = this.information.findIndex(item => item.id === updatedInfo.id);
-      if (index !== -1) {
-        this.information[index] = updatedInfo;
-      }
+    updateInfo(updateInfo) {
+      this.updateDoctor(updateInfo);
     },
     handleSelectedDoctor(doctor) {
       if (this.isOpenDoc && this.informationDoctors === doctor) {
-        this.isOpenDoc = false
-        this.informationDoctors = null
+        this.isOpenDoc = false;
+        this.informationDoctors = null;
       } else {
-        this.informationDoctors = doctor
-        this.isOpenDoc = true
-        this.isOpenInfo = false
+        this.informationDoctors = doctor;
+        this.isOpenDoc = true;
+        this.isOpenInfo = false;
       }
     },
     toggleList() {
@@ -137,7 +120,7 @@ export default {
       if (this.isOpenInfo) {
         this.isOpenDoc = false;
       }
-    },
+    }
   },
   mounted() {
     this.loadFromJSON();

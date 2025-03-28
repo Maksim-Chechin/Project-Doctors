@@ -1,25 +1,23 @@
 <template>
   <div
       class="menu"
-      @click="openIndex = index"
-      @mouseleave="openIndex = null"
       v-for="(spec, index) in specialties"
       :key="spec.speciality"
+      @click="openIndex = index"
+      @mouseleave="openIndex = null"
   >
-    <button
-        class="menu-button"
-    ><p>{{ spec.speciality }}</p> <span>{{ matchCounts[spec.speciality] || 0 }}</span>
+    <button class="menu-button">
+      <p>{{ spec.speciality }}</p>
+      <span>{{ matchCounts[spec.speciality] || 0 }}</span>
     </button>
     <transition name="fade">
-      <div
-          class="dropdown"
-          v-if="openIndex === index"
-      >
+      <div class="dropdown" v-if="openIndex === index">
         <button
-            @click.stop="lookInfo(item)"
-            v-for="(item, idx) in getMatchesForSpeciality(spec.speciality)"
+            v-for="(item, idx) in matches[spec.speciality]"
             :key="idx"
-        >{{ item.name }}
+            @click.stop="lookInfo(item)"
+        >
+          {{ item.name }}
         </button>
       </div>
     </transition>
@@ -38,80 +36,40 @@ export default {
   data() {
     return {
       specialties: [
-        {speciality: 'Акушерство'},
-        {speciality: 'Анестезиология'},
-        {speciality: 'Гастроэнтерология'},
-        {speciality: 'Гематология'},
-        {speciality: 'Гинекология'},
-        {speciality: 'Госпитальная медицина'},
-        {speciality: 'Интервенционная радиология'},
-        {speciality: 'Кардиохирургия'},
-        {speciality: 'Колопроктология'},
-        {speciality: 'Комбустиология'},
-        {speciality: 'Медицина неотложных состояний'},
-        {speciality: 'Нейрохирургия'},
-        {speciality: 'Неонатология'},
-        {speciality: 'Нефрология'},
-        {speciality: 'Общая хирургия'},
-        {speciality: 'Онкогинекология'},
-        {speciality: 'Онкология'},
-        {speciality: 'Ортопедическая хирургия'},
-        {speciality: 'Отоларингология — хирургия головы и шеи'},
-        {speciality: 'Пульмонология'},
-        {speciality: 'Реаниматология/Интенсивная терапия'},
-        {speciality: 'Сосудистая хирургия'},
-        {speciality: 'Терапия'},
-        {speciality: 'Торакальная хирургия'},
-        {speciality: 'Травматология'},
-        {speciality: 'Трансплантология'},
-        {speciality: 'Урология'},
-        {speciality: 'Челюстно-лицевая хирургия'},
-        {speciality: 'Другое'},
+        { speciality: 'Акушерство' }, { speciality: 'Анестезиология' }, { speciality: 'Гастроэнтерология' },
+        { speciality: 'Гематология' }, { speciality: 'Гинекология' }, { speciality: 'Госпитальная медицина' },
+        { speciality: 'Интервенционная радиология' }, { speciality: 'Кардиохирургия' }, { speciality: 'Колопроктология' },
+        { speciality: 'Комбустиология' }, { speciality: 'Медицина неотложных состояний' }, { speciality: 'Нейрохирургия' },
+        { speciality: 'Неонатология' }, { speciality: 'Нефрология' }, { speciality: 'Общая хирургия' },
+        { speciality: 'Онкогинекология' }, { speciality: 'Онкология' }, { speciality: 'Ортопедическая хирургия' },
+        { speciality: 'Отоларингология — хирургия головы и шеи' }, { speciality: 'Пульмонология' },
+        { speciality: 'Реаниматология/Интенсивная терапия' }, { speciality: 'Сосудистая хирургия' }, { speciality: 'Терапия' },
+        { speciality: 'Торакальная хирургия' }, { speciality: 'Травматология' }, { speciality: 'Трансплантология' },
+        { speciality: 'Урология' }, { speciality: 'Челюстно-лицевая хирургия' }, { speciality: 'Другое' }
       ],
-      comparisonResult: [],
       openIndex: null,
+    };
+  },
+  computed: {
+    matches() {
+      return this.array1.reduce((acc, item) => {
+        if (!acc[item.speciality]) acc[item.speciality] = [];
+        acc[item.speciality].push(item);
+        return acc;
+      }, {});
+    },
+    matchCounts() {
+      return Object.fromEntries(
+          Object.entries(this.matches).map(([key, value]) => [key, value.length])
+      );
     }
   },
   methods: {
-    compareArrays() {
-      this.comparisonResult = this.array1
-          .filter(item => this.specialties.some(spec => spec.speciality === item.speciality))
-          .map(item => ({
-            name: item.name,
-            speciality: item.speciality,
-            clinic: item.clinic,
-            address: item.address,
-            telEmail: item.telEmail,
-            additionalInformation: item.additionalInformation,
-
-          }));
-    },
-    getMatchesForSpeciality(speciality) {
-      return this.comparisonResult.filter(item => item.speciality === speciality);
-    },
     lookInfo(doctor) {
-      this.$emit('selectedDoctor', doctor)
-    }
-  },
-  computed: {
-    matchCounts() {
-      const counts = {};
-      this.specialties.forEach(spec => {
-        counts[spec.speciality] = this.array1.filter(item => item.speciality === spec.speciality).length;
-      });
-      return counts;
-    }
-  },
-  watch: {
-    array1: {
-      handler() {
-        this.compareArrays();
-      },
-      deep: true,
-      immediate: true
+      this.$emit('selectedDoctor', doctor);
     }
   }
-}
+};
 </script>
 
 <style scoped>

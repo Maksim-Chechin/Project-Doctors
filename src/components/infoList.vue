@@ -9,23 +9,21 @@
 </template>
 
 <script>
+import {mapState, mapMutations} from "vuex";
 import InfoItem from "@/components/infoItem.vue";
 
 export default {
   components: {InfoItem},
   emits: ['remove'],
-  props: {
-    information: {
-      type: Array,
-      required: true
-    }
+
+  computed: {
+    ...mapState(["information"]),
   },
+
   methods: {
+    ...mapMutations(["updateDoctor"]),
     updateInfo(updatedInfo) {
-      const index = this.information.findIndex(item => item.id === updatedInfo.id);
-      if (index !== -1) {
-        this.information[index] = updatedInfo;
-      }
+    this.updateDoctor(updatedInfo);
     }
   }
 }

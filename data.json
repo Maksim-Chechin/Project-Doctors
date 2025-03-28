@@ -1,35 +1,29 @@
 [
   {
-    "id": 1742710825965,
-    "name": "wefq4f4",
-    "speciality": "Акушерство",
-    "clinic": "qwfgq24g",
-    "address": "q4gqg",
-    "telEmail": "4gq4g4",
-    "cooperation": "qg43",
-    "brother": "gq43",
-    "additionalInformation": "q4gq34g"
+    "id": 1743058652138,
+    "name": "Иванов Василий Петрович",
+    "speciality": "Гематология",
+    "clinic": "Здоровье",
+    "address": "Улица Советская 105",
+    "telEmail": "8 (888) 888 88 88",
+    "additionalInformation": "Профессор, кандидат наук"
   },
   {
-    "name": "qg4qgq43",
-    "speciality": "Акушерство",
-    "clinic": "q43gq43",
-    "address": "q34g34",
-    "telEmail": "g4q3gq43g",
-    "cooperation": "q3g4",
-    "brother": "gq34g",
-    "additionalInformation": "34g4g",
-    "id": 1742710836497
+    "name": "Петрова Татьяна Павловна",
+    "speciality": "Кардиохирургия",
+    "clinic": "Мед +",
+    "address": "Улица Саратовская 1",
+    "telEmail": "8 (888) 888 88 88",
+    "additionalInformation": "Заведующая отделением хирургии",
+    "id": 1743058780009
   },
   {
-    "name": "q4g4g4g",
+    "id": 1743058949511,
+    "name": "Панченко Анастасия Олеговна",
     "speciality": "Акушерство",
-    "clinic": "gq3gq34g",
-    "address": "q34g4g",
-    "telEmail": "gqg4q3",
-    "cooperation": "g43qgq3",
-    "brother": "g4q3g4",
-    "additionalInformation": "3g43g34g4g",
-    "id": 1742710847133
+    "clinic": "Роддом 2",
+    "address": "Солнечная 101",
+    "telEmail": "8 (888) 888 88 88",
+    "additionalInformation": "акушер-гинеколог, глав врач"
   }
 ]

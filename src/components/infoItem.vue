@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import {mapMutations} from "vuex";
 import ModalEdit from "@/components/UI/modalEdit.vue";
 import MyInput from "@/components/UI/myInput.vue";
 import ModalDelete from "@/components/UI/modalDelete.vue";
@@ -112,25 +113,25 @@ export default {
   },
   data() {
     return {
-      isEdited: false,
       editedInfo: {...this.info},
       isOpenEditor: false,
       isOpenDelete: false,
     }
   },
   methods: {
+
+    ...mapMutations(["updateDoctor", "removeDoctor"]),
+
     editInfo() {
       this.isOpenEditor = true
       this.editedInfo = {...this.info};
     },
     saveInfo() {
-      this.isEdited = false
       this.$emit('update', this.editedInfo)
       this.isOpenEditor = false
     },
     canselEdit() {
       this.editedInfo = {...this.info}
-      this.isEdited = false
       this.isOpenEditor = false
       this.isOpenDelete = false
     }
