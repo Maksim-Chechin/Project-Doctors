@@ -5,10 +5,10 @@
 
 </template>
 
-<script>
-export default {
-  emits: ['closeDoc']
-}
+<script setup>
+import {defineEmits} from 'vue'
+
+const emits = defineEmits(['closeDelete'])
 </script>
 
 <style scoped>

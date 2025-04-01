@@ -11,22 +11,12 @@
           <span>Специальность</span>
           <p>{{ info.speciality }}</p>
         </div>
-        <!--      <div class="listGrid-info">-->
-        <!--        <span>Клиника</span>-->
-        <!--        <p>{{ info.clinic }}</p>-->
-        <!--      </div>-->
-        <!--      <div class="listGrid-info">-->
-        <!--        <span>Адрес</span>-->
-        <!--        <p>{{ info.address }}</p>-->
-        <!--      </div>-->
+
         <div class="listGrid-info">
           <span>Телефон/Email</span>
           <p>{{ info.telEmail }}</p>
         </div>
-        <!--      <div class="listGrid-info">-->
-        <!--        <span>Сотрудничающий</span>-->
-        <!--        <p>{{ info.cooperation }}</p>-->
-        <!--      </div>-->
+
       </div>
 
       <div class="infoItemBoxBtn">
@@ -59,7 +49,7 @@
         <h4>Телефон/Email</h4>
         <div><input class="input" v-model="editedInfo.telEmail" type="text"></div>
         <h4>Дополнительная информация</h4>
-        <div><input class="input" v-model="editedInfo.additionalInformation" type="text" ></div>
+        <div><input class="input" v-model="editedInfo.additionalInformation" type="text"></div>
       </div>
       <div class="modalEditBox">
         <button
@@ -96,47 +86,38 @@
   </div>
 </template>
 
-<script>
-import {mapMutations} from "vuex";
+<script setup>
+import {ref, defineProps, defineEmits} from "vue";
 import ModalEdit from "@/components/UI/modalEdit.vue";
-import MyInput from "@/components/UI/myInput.vue";
 import ModalDelete from "@/components/UI/modalDelete.vue";
 
-export default {
-  components: {ModalDelete, MyInput, ModalEdit,},
-  emits: ['remove', 'update',],
-  props: {
-    info: {
-      type: Object,
-      required: true
-    },
-  },
-  data() {
-    return {
-      editedInfo: {...this.info},
-      isOpenEditor: false,
-      isOpenDelete: false,
-    }
-  },
-  methods: {
-
-    ...mapMutations(["updateDoctor", "removeDoctor"]),
-
-    editInfo() {
-      this.isOpenEditor = true
-      this.editedInfo = {...this.info};
-    },
-    saveInfo() {
-      this.$emit('update', this.editedInfo)
-      this.isOpenEditor = false
-    },
-    canselEdit() {
-      this.editedInfo = {...this.info}
-      this.isOpenEditor = false
-      this.isOpenDelete = false
-    }
+const props = defineProps({
+  info: {
+    type: Object,
+    required: true,
   }
+})
+const emit = defineEmits(["remove", "update"]);
+const editedInfo = ref({...props.info});
+const isOpenEditor = ref(false);
+const isOpenDelete = ref(false);
+
+const editInfo = () => {
+  isOpenEditor.value = true;
+  editedInfo.value = {...props.info};
 }
+
+const saveInfo = () => {
+  emit("update", editedInfo.value);
+  isOpenEditor.value = false;
+}
+
+const canselEdit = () => {
+  editedInfo.value = {...props.info}
+  isOpenEditor.value = false;
+  isOpenDelete.value = false;
+}
+
 </script>
 
 <style scoped>

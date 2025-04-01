@@ -24,51 +24,44 @@
   </div>
 </template>
 
-<script>
-export default {
-  emits: ['selectedDoctor'],
-  props: {
-    array1: {
-      type: Array,
-      required: true
-    }
-  },
-  data() {
-    return {
-      specialties: [
-        { speciality: 'Акушерство' }, { speciality: 'Анестезиология' }, { speciality: 'Гастроэнтерология' },
-        { speciality: 'Гематология' }, { speciality: 'Гинекология' }, { speciality: 'Госпитальная медицина' },
-        { speciality: 'Интервенционная радиология' }, { speciality: 'Кардиохирургия' }, { speciality: 'Колопроктология' },
-        { speciality: 'Комбустиология' }, { speciality: 'Медицина неотложных состояний' }, { speciality: 'Нейрохирургия' },
-        { speciality: 'Неонатология' }, { speciality: 'Нефрология' }, { speciality: 'Общая хирургия' },
-        { speciality: 'Онкогинекология' }, { speciality: 'Онкология' }, { speciality: 'Ортопедическая хирургия' },
-        { speciality: 'Отоларингология — хирургия головы и шеи' }, { speciality: 'Пульмонология' },
-        { speciality: 'Реаниматология/Интенсивная терапия' }, { speciality: 'Сосудистая хирургия' }, { speciality: 'Терапия' },
-        { speciality: 'Торакальная хирургия' }, { speciality: 'Травматология' }, { speciality: 'Трансплантология' },
-        { speciality: 'Урология' }, { speciality: 'Челюстно-лицевая хирургия' }, { speciality: 'Другое' }
-      ],
-      openIndex: null,
-    };
-  },
-  computed: {
-    matches() {
-      return this.array1.reduce((acc, item) => {
-        if (!acc[item.speciality]) acc[item.speciality] = [];
-        acc[item.speciality].push(item);
-        return acc;
-      }, {});
-    },
-    matchCounts() {
-      return Object.fromEntries(
-          Object.entries(this.matches).map(([key, value]) => [key, value.length])
-      );
-    }
-  },
-  methods: {
-    lookInfo(doctor) {
-      this.$emit('selectedDoctor', doctor);
-    }
+<script setup>
+import { defineProps, defineEmits, ref, computed } from 'vue';
+
+const props = defineProps({
+  array1: {
+    type: Array,
+    required: true
   }
+});
+
+const emit = defineEmits(['selectedDoctor']);
+const openIndex = ref(null);
+
+const specialties = ref([
+  'Акушерство', 'Анестезиология', 'Гастроэнтерология', 'Гематология', 'Гинекология', 'Госпитальная медицина',
+  'Интервенционная радиология', 'Кардиохирургия', 'Колопроктология', 'Комбустиология', 'Медицина неотложных состояний',
+  'Нейрохирургия', 'Неонатология', 'Нефрология', 'Общая хирургия', 'Онкогинекология', 'Онкология',
+  'Ортопедическая хирургия', 'Отоларингология — хирургия головы и шеи', 'Пульмонология', 'Реаниматология/Интенсивная терапия',
+  'Сосудистая хирургия', 'Терапия', 'Торакальная хирургия', 'Травматология', 'Трансплантология', 'Урология',
+  'Челюстно-лицевая хирургия', 'Другое'
+].map(speciality => ({ speciality })));
+
+const matches = computed(() => {
+  return props.array1.reduce((acc, item) => {
+    if (!acc[item.speciality]) acc[item.speciality] = [];
+    acc[item.speciality].push(item);
+    return acc;
+  }, {});
+});
+
+const matchCounts = computed(() => {
+  return Object.fromEntries(
+      Object.entries(matches.value).map(([key, value]) => [key, value.length])
+  );
+});
+
+const lookInfo = (doctor) => {
+  emit('selectedDoctor', doctor);
 };
 </script>
 
@@ -124,7 +117,6 @@ export default {
   border-left-color: teal;
   border-radius: 5px;
   background: #c4c4c4;
-
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -133,7 +125,6 @@ export default {
 
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
-  transform: translateY(-10px); /* Исчезает снизу */
+  transform: translateY(-10px);
 }
-
 </style>

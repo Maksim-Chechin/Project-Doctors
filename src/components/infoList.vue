@@ -8,24 +8,17 @@
   ></info-item>
 </template>
 
-<script>
-import {mapState, mapMutations} from "vuex";
+<script setup>
+import {computed} from "vue";
+import {useStore} from "vuex";
 import InfoItem from "@/components/infoItem.vue";
 
-export default {
-  components: {InfoItem},
-  emits: ['remove'],
-
-  computed: {
-    ...mapState(["information"]),
-  },
-
-  methods: {
-    ...mapMutations(["updateDoctor"]),
-    updateInfo(updatedInfo) {
-    this.updateDoctor(updatedInfo);
-    }
-  }
+const store = useStore();
+const information = computed(() =>
+    store.state.information
+)
+const updateInfo = (updateInfo) => {
+  store.commit("updateDoctor", updateInfo);
 }
 </script>
 

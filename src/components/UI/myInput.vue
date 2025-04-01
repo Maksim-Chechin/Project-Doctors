@@ -5,20 +5,19 @@
          @input="upDateInput">
 </template>
 
-<script>
-export default {
-  name: 'my-input',
-  props: {
-    modelValue: [String, Number]
-  },
-  methods: {
-    upDateInput(event) {
-      this.$emit('update:modelValue', event.target.value)
-    }
-  }
+<script setup>
+import {defineProps, defineEmits} from 'vue'
+
+const props = defineProps({
+  modelValue: {String, Number},
+})
+const emit = defineEmits(["update:modelValue"])
+const upDateInput = (event) => {
+  emit("update:modelValue", event.target.value)
 }
 </script>
 
 <style scoped>
 
 </style>
+

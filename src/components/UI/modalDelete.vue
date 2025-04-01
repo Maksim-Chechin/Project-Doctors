@@ -6,10 +6,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  emits: ['closeDelete']
-}
+<script setup>
+import {defineEmits} from 'vue'
+
+const emits = defineEmits(['closeDelete'])
 </script>
 
 <style scoped>
@@ -22,6 +22,7 @@ export default {
   border-radius: 4px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;

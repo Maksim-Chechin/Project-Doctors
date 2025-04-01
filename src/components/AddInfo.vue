@@ -4,7 +4,7 @@
     <my-input placeholder="ФИО врача" v-model="info.name"></my-input>
     <div>
       <label for="selectSpeciality">Специальность</label>
-      <select class="input" id="selectSpeciality" v-model="selectedSpecialities">
+      <select class="input" id="selectSpeciality" v-model="selectSpeciality">
         <option disabled value="">Выберите</option>
         <option v-for="spec in specialtiesList" :key="spec" :value="spec">
           {{ spec }}
@@ -27,74 +27,70 @@
   </button>
 </template>
 
-<script>
+<script setup>
 import MyInput from "@/components/UI/myInput.vue";
 
-export default {
-  components: {MyInput},
-  emits: ['create',],
-  data() {
-    return {
-      specialtiesList: [
-        'Акушерство',
-        'Анестезиология',
-        'Гастроэнтерология',
-        'Гематология',
-        'Гинекология',
-        'Госпитальная медицина',
-        'Госпитальная медицина',
-        'Интервенционная радиология',
-        'Кардиохирургия',
-        'Колопроктология',
-        'Комбустиология',
-        'Медицина неотложных состояний',
-        'Нейрохирургия',
-        'Неонатология',
-        'Нефрология',
-        'Общая хирургия',
-        'Онкогинекология',
-        'Онкология',
-        'Ортопедическая хирургия',
-        'Отоларингология — хирургия головы и шеи',
-        'Пульмонология',
-        'Реаниматология/Интенсивная терапия',
-        'Сосудистая хирургия',
-        'Терапия',
-        'Торакальная хирургия',
-        'Травматология',
-        'Трансплантология',
-        'Урология',
-        'Челюстно-лицевая хирургия',
-        'Другое',
-      ],
-      selectedSpecialities: '',
-      info: {
-        id: 0,
-        name: '',
-        speciality: '',
-        clinic: '',
-        address: '',
-        telEmail: '',
-        additionalInformation: ''
-      }
-    }
-  },
-  methods: {
-    createInfo() {
-      this.info.id = Date.now()
-      this.info.speciality = this.selectedSpecialities
-      this.$emit('create', this.info)
-      this.info = {
-        name: '',
-        speciality: '',
-        clinic: '',
-        address: '',
-        telEmail: '',
-        additionalInformation:''
-      }
-    },
-  },
+import {defineEmits, ref} from 'vue'
+
+const emits = defineEmits(["closeDelete"])
+const specialtiesList = [
+  'Акушерство',
+  'Анестезиология',
+  'Гастроэнтерология',
+  'Гематология',
+  'Гинекология',
+  'Госпитальная медицина',
+  'Госпитальная медицина',
+  'Интервенционная радиология',
+  'Кардиохирургия',
+  'Колопроктология',
+  'Комбустиология',
+  'Медицина неотложных состояний',
+  'Нейрохирургия',
+  'Неонатология',
+  'Нефрология',
+  'Общая хирургия',
+  'Онкогинекология',
+  'Онкология',
+  'Ортопедическая хирургия',
+  'Отоларингология — хирургия головы и шеи',
+  'Пульмонология',
+  'Реаниматология/Интенсивная терапия',
+  'Сосудистая хирургия',
+  'Терапия',
+  'Торакальная хирургия',
+  'Травматология',
+  'Трансплантология',
+  'Урология',
+  'Челюстно-лицевая хирургия',
+  'Другое',
+];
+const selectSpeciality = ref(null);
+const info = ref({
+  id: 0,
+  name: '',
+  speciality: '',
+  clinic: '',
+  address: '',
+  telEmail: '',
+  additionalInformation: '',
+});
+
+const createInfo = () => {
+  info.value.id = Date.now();
+  info.value.speciality = selectSpeciality.value;
+  emits('create', {...info.value});
+  info.value = {
+    name: '',
+    speciality: '',
+    clinic: '',
+    address: '',
+    telEmail: '',
+    additionalInformation: ''
+  }
+  selectSpeciality.value = null;
 }
+
 </script>
 
 <style scoped>

@@ -12,11 +12,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'modal-list',
-  emits: (['look'])
-}
+<script setup>
+import {defineEmits} from 'vue'
+
+const emits = defineEmits(['closeDelete'])
 </script>
 
 <style scoped>

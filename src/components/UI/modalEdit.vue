@@ -5,18 +5,14 @@
       <hr>
       <br>
       <slot></slot>
-
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  emits: ['closeEditor'],
-  data() {
-    return {}
-  }
-}
+<script setup>
+import {defineEmits} from 'vue';
+
+const emit = defineEmits(["closeEditor"]);
 </script>
 
 <style scoped>
@@ -31,6 +27,7 @@ export default {
   position: relative;
   text-align: left;
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -42,6 +39,4 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
-
 </style>

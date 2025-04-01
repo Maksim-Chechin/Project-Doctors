@@ -5,9 +5,9 @@
         <div class="logo">Doctors</div>
       </div>
       <div class="search">
-        <my-input
-            placeholder="Введите для поиска"
-        ></my-input>
+        <my-input placeholder="Введите для поиска">
+
+        </my-input>
         <button class="btn-teal">Поиск</button>
       </div>
     </div>
@@ -22,8 +22,9 @@
   </div>
 </template>
 
-<script>
-export default {}
+<script setup>
+import MyInput from "@/components/UI/myInput.vue";
+
 </script>
 
 <style scoped>
@@ -37,7 +38,8 @@ export default {}
   cursor: pointer;
   text-transform: uppercase;
 }
-.btn:hover{
+
+.btn:hover {
   background-color: #545454;
   color: #e8e8e8;
 }

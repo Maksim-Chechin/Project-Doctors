@@ -12,11 +12,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'modal-form',
-  emits: (['close'])
-}
+<script setup>
+import {defineEmits} from 'vue'
+
+const emits = defineEmits(['close'])
 </script>
 
 <style scoped>

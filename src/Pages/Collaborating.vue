@@ -69,69 +69,64 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import {useStore} from "vuex";
+import {ref, computed, watch, onMounted} from "vue";
 import AddInfo from "@/components/AddInfo.vue";
 import InfoList from "@/components/infoList.vue";
 import ModalList from "@/components/UI/modalList.vue";
 import ModalForm from "@/components/UI/modalForm.vue";
 import Specialists from "@/components/specialists.vue";
-import ModalDoc from "@/components/UI/modalDoc.vue";
-import {mapState, mapGetters, mapActions} from "vuex";
 
-export default {
-  data() {
-    return {
-      isOpen: false,
-      isOpenInfo: false,
-      isOpenDoc: false,
-      informationDoctors: '',
-    };
-  },
-  components: {ModalDoc, Specialists, InfoList, AddInfo, ModalList, ModalForm,},
-  computed: {
-    ...mapState(["information"]),
-    ...mapGetters(["getInformation"]),
-  },
-  methods: {
-    ...mapActions(["addDoctor", "removeDoctor", "updateDoctor", "loadFromServer", "saveToServer" ]),
-    createInfo(info) {
-      this.addDoctor(info);
-    },
-    removeItemInfo(info) {
-      this.$store.dispatch("removeDoctor", info.id);
-    },
-    updateInfo(updateInfo) {
-      this.updateDoctor(updateInfo);
-    },
-    handleSelectedDoctor(doctor) {
-      if (this.isOpenDoc && this.informationDoctors === doctor) {
-        this.isOpenDoc = false;
-        this.informationDoctors = null;
-      } else {
-        this.informationDoctors = doctor;
-        this.isOpenDoc = true;
-        this.isOpenInfo = false;
-      }
-    },
-    toggleList() {
-      this.isOpenInfo = !this.isOpenInfo;
-      if (this.isOpenInfo) {
-        this.isOpenDoc = false;
-      }
-    }
-  },
-  mounted() {
-    this.loadFromServer();
-  },
-  watch: {
-    information: {
-      handler() {
-        this.saveToServer();
-      },
-      deep: true
-    }
+const store = useStore();
+const isOpen = ref(false);
+const isOpenInfo = ref(false);
+const isOpenDoc = ref(false);
+const informationDoctors = ref(null);
+
+const information = computed(() =>
+  store.state.information
+)
+
+const createInfo = (info) => {
+  store.dispatch("addDoctor", info);
+}
+
+const removeItemInfo = (info) => {
+  store.dispatch("removeDoctor", info.id);
+}
+
+const updateInfo = (updateInfo) => {
+  store.dispatch("updateDoctor", updateInfo);
+}
+
+const handleSelectedDoctor = (doctor) => {
+  if (isOpenDoc.value && informationDoctors.value === doctor) {
+    isOpenDoc.value = false;
+    informationDoctors.value = null;
+  } else {
+    informationDoctors.value = doctor;
+    isOpenDoc.value = true;
+    isOpenInfo.value = false;
   }
 }
+
+const toggleList = () => {
+  isOpenInfo.value = !isOpenInfo.value;
+  if (isOpenInfo.value) {
+    isOpenDoc.value = false;
+  }
+}
+
+onMounted(() => {
+  store.dispatch("loadFromServer")
+})
+
+watch(information, () => {
+  store.dispatch("saveToServer");
+}, {deep: true})
+
+
 </script>
 
 <style scoped>
@@ -190,17 +185,3 @@ export default {
 }
 
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
