@@ -74,10 +74,9 @@ import AddInfo from "@/components/AddInfo.vue";
 import InfoList from "@/components/infoList.vue";
 import ModalList from "@/components/UI/modalList.vue";
 import ModalForm from "@/components/UI/modalForm.vue";
-import axios from "axios";
 import Specialists from "@/components/specialists.vue";
 import ModalDoc from "@/components/UI/modalDoc.vue";
-import {mapState, mapGetters, mapMutations, mapActions} from "vuex";
+import {mapState, mapGetters, mapActions} from "vuex";
 
 export default {
   data() {
@@ -94,13 +93,12 @@ export default {
     ...mapGetters(["getInformation"]),
   },
   methods: {
-    ...mapActions(["addDoctor", "removeDoctor", "updateDoctor" ]),
-    ...mapActions(["loadFromJSON", "saveToJSON"]),
+    ...mapActions(["addDoctor", "removeDoctor", "updateDoctor", "loadFromServer", "saveToServer" ]),
     createInfo(info) {
       this.addDoctor(info);
     },
     removeItemInfo(info) {
-      this.removeDoctor(info.id);
+      this.$store.dispatch("removeDoctor", info.id);
     },
     updateInfo(updateInfo) {
       this.updateDoctor(updateInfo);
@@ -123,12 +121,12 @@ export default {
     }
   },
   mounted() {
-    this.loadFromJSON();
+    this.loadFromServer();
   },
   watch: {
     information: {
       handler() {
-        this.saveToJSON();
+        this.saveToServer();
       },
       deep: true
     }

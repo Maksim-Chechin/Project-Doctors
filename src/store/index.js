@@ -17,7 +17,7 @@ export default createStore({
         setInformation(state, data) {
             state.information = data
         },
-        addDoctor(state, data) {
+        addDoctor(state, doctor) {
             state.information.push({...doctor, id: Date.now()})
         },
         removeDoctor(state, doctorId) {
@@ -31,21 +31,33 @@ export default createStore({
         }
     },
     actions: {
-        async loadFromJSON({commit}) {
+        async removeDoctor({ commit, dispatch }, doctorId) {
+            commit("removeDoctor", doctorId);
+            await dispatch("saveToServer");
+        },
+        async addDoctor({commit, dispatch}, doctor) {
+            commit("addDoctor", doctor);
+            await dispatch("saveToJSON");
+        },
+        async loadFromServer({commit}) {
             try {
-                const response = await axios.get("http://localhost:3000/data.json");
-                commit("setInformation", response.data);
-                console.log("Данные загружены", error);
+                const response = await axios.get(
+                    "https://projecrdoctors-default-rtdb.firebaseio.com/doctors.json");
+                commit("setInformation", response.data?.doctors || []);
+                console.log("Данные загружены", response.data);
             } catch (error) {
                 console.error("Ошибка загрузки:", error);
             }
         },
-        async saveToJSON({state}) {
+        async saveToServer({state}) {
             try {
-                await axios.post("http://localhost:3000/data.json", state.information);
-            console.log("Данные сохранены")
+                await axios.put(
+                    "https://projecrdoctors-default-rtdb.firebaseio.com/doctors.json",
+                    {doctors: state.information}
+                );
+                console.log("Данные сохранены");
             } catch (error) {
-                console.error("Ошибка сохранения")
+                console.error("Ошибка сохранения", error);
             }
         }
     }

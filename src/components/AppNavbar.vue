@@ -2,7 +2,7 @@
   <div class="fixBlock">
     <div class="container titleBlock">
       <div>
-        <div class="logo">КСБ</div>
+        <div class="logo">Doctors</div>
       </div>
       <div class="search">
         <my-input
