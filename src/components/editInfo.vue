@@ -30,42 +30,14 @@
 <script setup>
 import MyInput from "@/components/UI/myInput.vue";
 
-import {defineEmits, ref} from 'vue'
+import {computed,defineEmits, ref} from 'vue'
+import store from "@/store/index.js";
 
 const emits = defineEmits(["closeDelete"])
-const specialtiesList = [
-  'Акушерство',
-  'Анестезиология',
-  'Гастроэнтерология',
-  'Гематология',
-  'Гинекология',
-  'Госпитальная медицина',
-  'Госпитальная медицина',
-  'Интервенционная радиология',
-  'Кардиохирургия',
-  'Колопроктология',
-  'Комбустиология',
-  'Медицина неотложных состояний',
-  'Нейрохирургия',
-  'Неонатология',
-  'Нефрология',
-  'Общая хирургия',
-  'Онкогинекология',
-  'Онкология',
-  'Ортопедическая хирургия',
-  'Отоларингология — хирургия головы и шеи',
-  'Пульмонология',
-  'Реаниматология/Интенсивная терапия',
-  'Сосудистая хирургия',
-  'Терапия',
-  'Торакальная хирургия',
-  'Травматология',
-  'Трансплантология',
-  'Урология',
-  'Челюстно-лицевая хирургия',
-  'Другое',
-];
+
+const specialtiesList = computed(() => store.state.spec.specialtiesList);
 const selectSpeciality = ref(null);
+
 const info = ref({
   id: 0,
   name: '',
@@ -77,6 +49,23 @@ const info = ref({
 });
 
 const createInfo = () => {
+  const requiredFields = {
+    name: "ФИО",
+    speciality: "Cпециальность",
+    clinic: "Название клиники",
+    address: "Адрес",
+    telEmail: "Телефон/Email",
+  };
+
+  const missingFields = Object.entries(requiredFields)
+      .filter(([key]) => !info.value[key]?.trim())
+      .map(([, label]) => `- ${label}`);
+
+  if (!selectSpeciality.value || !missingFields.length) {
+    alert(`Пожалуйста, заполните все обязательные поля: \n ${ missingFields.join("\n ")}`);
+    return;
+  }
+
   info.value.id = Date.now();
   info.value.speciality = selectSpeciality.value;
   emits('create', {...info.value});
@@ -88,7 +77,7 @@ const createInfo = () => {
     telEmail: '',
     additionalInformation: ''
   }
-  selectSpeciality.value = null;
+    selectSpeciality.value = null;
 }
 
 </script>

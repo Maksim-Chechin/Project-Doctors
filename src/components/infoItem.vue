@@ -67,7 +67,7 @@
 
 
     <modal-delete v-if="isOpenDelete" @closeDelete="isOpenDelete = false">
-      <h2>Действительно хотите удалить?</h2>
+      <h2 class="delete">Действительно хотите удалить?</h2>
       <div class="modalDeleteBox">
         <button
             class="btn-red"
@@ -182,5 +182,7 @@ const canselEdit = () => {
 .modalDeleteBox button {
   margin-top: 30%;
 }
-
+.delete {
+  color: darkred;
+}
 </style>

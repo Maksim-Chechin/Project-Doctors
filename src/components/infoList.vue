@@ -15,10 +15,10 @@ import InfoItem from "@/components/infoItem.vue";
 
 const store = useStore();
 const information = computed(() =>
-    store.state.information
+    store.state.doc.information
 )
 const updateInfo = (updateInfo) => {
-  store.commit("updateDoctor", updateInfo);
+  store.dispatch("doc/updateDoctor", updateInfo);
 }
 </script>
 

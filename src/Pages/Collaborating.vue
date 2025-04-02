@@ -18,16 +18,16 @@
       </div>
       <div class="modalForm">
         <modal-form v-if="isOpen" @close="isOpen = false">
-          <add-info
+          <edit-info
               @create="createInfo"
-          ></add-info>
+          ></edit-info>
         </modal-form>
       </div>
       <div>
-        <specialists
+        <menu-specialists
             :array1="information"
             @selectedDoctor="handleSelectedDoctor"
-        ></specialists>
+        ></menu-specialists>
       </div>
     </div>
 
@@ -72,11 +72,12 @@
 <script setup>
 import {useStore} from "vuex";
 import {ref, computed, watch, onMounted} from "vue";
-import AddInfo from "@/components/AddInfo.vue";
+import EditInfo from "@/components/editInfo.vue";
 import InfoList from "@/components/infoList.vue";
 import ModalList from "@/components/UI/modalList.vue";
 import ModalForm from "@/components/UI/modalForm.vue";
-import Specialists from "@/components/specialists.vue";
+import MenuSpecialists from "@/components/menuSpecialists.vue";
+import ModalDoc from "@/components/UI/modalDoc.vue";
 
 const store = useStore();
 const isOpen = ref(false);
@@ -85,19 +86,19 @@ const isOpenDoc = ref(false);
 const informationDoctors = ref(null);
 
 const information = computed(() =>
-  store.state.information
+  store.state.doc.information
 )
 
 const createInfo = (info) => {
-  store.dispatch("addDoctor", info);
+  store.dispatch("doc/addDoctor", info);
 }
 
 const removeItemInfo = (info) => {
-  store.dispatch("removeDoctor", info.id);
+  store.dispatch("doc/removeDoctor", info.id);
 }
 
 const updateInfo = (updateInfo) => {
-  store.dispatch("updateDoctor", updateInfo);
+  store.dispatch("doc/updateDoctor", updateInfo);
 }
 
 const handleSelectedDoctor = (doctor) => {
@@ -119,11 +120,11 @@ const toggleList = () => {
 }
 
 onMounted(() => {
-  store.dispatch("loadFromServer")
+  store.dispatch("doc/loadFromServer")
 })
 
 watch(information, () => {
-  store.dispatch("saveToServer");
+  store.dispatch("doc/saveToServer");
 }, {deep: true})
 
 
